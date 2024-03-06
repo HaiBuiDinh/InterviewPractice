@@ -1,6 +1,6 @@
 # Những câu hỏi phỏng vấn có thể được hỏi
 
-##1 - Những câu hỏi về android:
+## 1 - Những câu hỏi về android:
 - `Activity`, `Fragment`,...lifecycle, tương tác và truyền dữ liệu giữa activity và fragment,...
 - Layouts: `Relative`, `Linear`, `Contraint`,...
 - Jetpack:: `ViewModel`, `livedata`, `Room`, `Binding`,...
@@ -9,7 +9,7 @@
 - `RxJava`, `RxKotlin`, `Coroutine`,...
 
 
-##2 - Những câu hỏi thốn hơn
+## 2 - Những câu hỏi thốn hơn
 - `OOP`
 - `SOLID`
 - `Design Pattern`
@@ -18,7 +18,7 @@
 - Phát hiện và xử lý `Memory leak`
 
 # Múc!
-##OOP - *Object-Oriented Programming*
+## OOP - *Object-Oriented Programming*
 
 ![img.jpg](OOP.jpg)
 
@@ -33,7 +33,7 @@
   - Tính đóng gói (`encapsulation`) --> Đóng gói attributes, methods thành class, đóng gói các class thành package -> che giấu thông tin và đảm bảo sự toàn vẹn của dữ liệu.
   - Tính đa hình (`polymorphism`) --> *Overriding* (ghi đè) và *Overloading* (nạp chồng - các method cùng tên nhưng khác tham số đầu vào)
 
-##SOLID
+## SOLID
 
 ![img.png](Solid.png)
 
@@ -56,10 +56,10 @@
        ( Các class giao tiếp với nhau thông qua interface, không phải thông qua implementation.)
            
 
-##Thread
+## Thread
 ![img.png](thread.PNG)
-- ###Khai báo
-    - ####Extends Thread
+- ### Khai báo
+    - #### Extends Thread
     ``` ```
     ```java 
     public class MyThread extends Thread {
@@ -74,7 +74,7 @@
         }
     }
   ```
-    - ####Implement Runnable
+    - #### Implement Runnable
     ```java
       public class MyRunnable implements Runnable {
         public void run() {
@@ -87,7 +87,7 @@
             thread.start(); // Bắt đầu thực thi luồng
         }
     }
-- ###Các phương thức trong Thread
+- ### Các phương thức trong Thread
     - `suspend()` : Đây là phương thức làm tạm dừng hoạt động của 1 luồng nào đó bằng các ngưng cung cấp CPU cho luồng này. Để cung cấp lại CPU cho luồng ta sử dụng phương thức resume(). Cần lưu ý 1 điều là ta không thể dừng ngay hoạt động của luồng bằng phương thức này. Phương thức suspend() không dừng ngay tức thì hoạt động của luồng mà sau khi luồng này trả CPU về cho hệ điều hành thì không cấp CPU cho luồng nữa.
     - `resume()` : Đây là phương thức làm cho luồng chạy lại khi luồng bị dừng do phương thức suspend() bên trên. Phương thức này sẽ đưa luồng vào lại lịch điều phối CPU để luồng được cấp CPU chạy lại bình thường.
     - `stop()` : Luồng này sẽ kết thúc phương thức run() bằng cách ném ra 1 ngoại lệ ThreadDeath, điều này cũng sẽ làm luồng kết thúc 1 cách ép buộc. Nếu giả sử, trước khi gọi stop() mà luồng đang nắm giữa 1 đối tượng nào đó hoặc 1 tài nguyên nào đó mà luồng khác đang chờ thì có thể dẫn tới việc sảy ra deadlock.
@@ -110,7 +110,7 @@
     - `isInterrupted()` : kiểm tra nếu thread đã bị ngắt.
     - `interrupted()` : kiểm tra nếu thread hiện tại đã bị ngắt.
 
-- ###Luồng Deamon
+- ### Luồng Deamon
     - Java chia thread làm 2 loại: một loại `thông thường` và `Daemon Thread`. Chúng chỉ khác nhau ở cách thức ngừng hoạt động. Trong một chương trình các luồng thông thường và luồng Daemon chạy song song với nhau. *Khi tất cả các luồng thông thường kết thúc, mọi luồng Daemon cũng sẽ bị kết thúc theo bất kể nó đang làm việc gì*. 
     
     - Sử dụng `setDaemon(boolean)` để xác định một luồng là Daemon hoặc không. Chú ý, bạn chỉ có thể gọi hàm setDeamon(boolean) khi thread chưa được chạy.
