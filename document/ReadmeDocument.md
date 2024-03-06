@@ -117,7 +117,68 @@
     
     - Khi một luồng mới được tạo ra, nó được thừa hưởng đặc tính daemon từ luồng cha.
 
-`Deamon thread thường dùng làm gì???? -> Gom rác: gom các tài nguyên không còn sử dụng để giải phóng bộ nhớ. Khi tất cả các luồng người dùng không còn hoạt động nữa luồng gom rác cũng bị dừng theo.`
+    --> Deamon thread thường dùng làm gì???? -> Gom rác: gom các tài nguyên không còn sử dụng để giải phóng bộ nhớ. Khi tất cả các luồng người dùng không còn hoạt động nữa luồng gom rác cũng bị dừng theo.
+
+    - VD:
+    ```java
+    public class WorkingThread implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                processSomething();
+            }
+        }
+     
+        private void processSomething() {
+            try {
+                System.out.println("Processing working thread");
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public class DaemonThreadTest {
+    
+        public static void main(String[] args) throws InterruptedException {
+            Thread dt = new Thread(new WorkingThread(), "My Daemon Thread");
+            dt.setDaemon(true);
+            dt.start();
+     
+            // continue program
+            Thread.sleep(3000);
+            System.out.println(">><< Finishing main program");
+        }
+    
+    }
+    ```
+    ```
+      Processing working thread
+      Processing working thread
+      Processing working thread
+      Processing working thread
+      Processing working thread
+      Processing working thread
+      >><< Finishing main program
+    ```
+
+
+- ### Đồng bộ hóa luồng
+  - Tại sao cần đồng bộ?:
+    - ![img.png](method_area_and_heap.png)
+    
+    - Khi chương trình khởi chạy thì nó sẽ để tất cả các class, methos,..vào `method area` còn tất cả các tham chiếu thì sẽ được để vào vùng nhớ `heap`. Hai vùng nhớ này được chia sẻ nến tất cả các luông trong java đều có thể truy cập vào hai vùng nhớ này. Nếu hai hay nhiều luồng cùng chọc vào và thay đổi dữ liệu trong cùng một thời điểm thì dễ dẫn đến sai lệch data, khó kiểm soát data.
+
+  - Cơ chế quản lý luồng đồng bộ (Java monitor)
+    - ![img.png](java_monitor.png)
+    - Khi 1 luồng đến để bắt đầu monitor region thì nó được bảo vệ bởi monitor, mà monitor này đang bị chiếm giữ bởi 1 luồng khác, Còn các luồng mới hơn luồng đang được bảo vệ đến sẽ bị đưa vào entry set. Sau khi luồng đang chiếm giữ monitor này kết thúc công việc và trả monitor thì luồng đang được monitor bảo vệ sẽ được đưa vào làm luồng chiếm giữ monitor. Còn các luồng đang ở entry set sẽ phải tranh đấu để dành được monitor bào vệ làm luồng tiếp theo. Quá trình tranh đấu được thực hiện bởi máy ảo java dựa trên độ ưu tiên hoặc cơ chế `FIFO` (First In First Out), `LIFO` (Last In First Out).
+    - Luồng trong monitor của thể trả lại monitor theo 2 cách: `Hoàn thành công việc` hoặc gọi lệnh `wait()`.
+    - Nếu luồng chiếm giữ trả monitor mà không gọi `notify()` thì các luồng trong `entry set` sẽ tranh nhau, còn nếu gọi thì các luồng trong 2 vùng `entry/wait set` sẽ tranh nhau.
+    - Lưu ý: Phương thức `wait()`,`notify()`,`notifyall()` là phương thức của đối tượng mà luồng đang sử dụng chứ không phải phương thức của luồng. Xem chi tiết ở phần dưới
+
+- ### Các cách để đồng bộ hóa luồng
+
+  ![img.png](java_Synchronization.jpg)
 
 
 
