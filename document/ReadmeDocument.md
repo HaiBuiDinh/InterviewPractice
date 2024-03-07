@@ -180,5 +180,69 @@
 
   ![img.png](java_Synchronization.jpg)
 
+  ## TỐI ƯU PERFORMANCE
+- ### Asynchromous loading (Hạn chế tối đa các việc nặng trên UI thread)
+- ### Caching (Memory/Database cache)
+- ### Dùng thuật toán tối ưu nhất có thể (Tùy vào từng task cụ thể mà phân tích đưa ra thuật toán xử lý cho chuẩn)
+- ### Dùng đúng cấu trúc dữ liệu
+    - Hash Map/Set - SpareArray
+    - ArrayList - LinkedList
+    - String - StringBuilder
+    - Int-Enum
+    - ...
+- ### Tối ưu SQL
+    - #### Dùng Index
+    - Tối ưu projection khi query
+        - `Chỉ chọn các cột cần thiết`: Chỉ chọn các cột mà bạn thực sự cần trong kết quả của truy vấn. Việc này giúp giảm bớt lượng dữ liệu được trả về từ cơ sở dữ liệu và cải thiện hiệu suất truy vấn.
+
+        - `Sử dụng SELECT * một cách cẩn thận`: Tránh sử dụng SELECT * để chọn tất cả các cột từ bảng. Thay vào đó, chỉ chọn các cột mà bạn cần thực sự. Việc này giúp tránh việc trả về quá nhiều dữ liệu không cần thiết và làm chậm truy vấn.
+
+        - `Sử dụng các hàm tối ưu`: Trong một số trường hợp, sử dụng các hàm tối ưu như COALESCE, CASE, hoặc các hàm toán học có thể giúp tối ưu hóa phép chiếu và làm giảm lượng dữ liệu được trả về.
+
+        - `Sử dụng các cột đơn giản`: Khi có thể, sử dụng các cột đơn giản thay vì các biểu thức phức tạp. Việc này giúp cơ sở dữ liệu dễ dàng tối ưu hóa và thực hiện truy vấn một cách hiệu quả hơn.
+
+        - `Sử dụng các chỉ số (indexes)`: Đảm bảo rằng các cột được sử dụng trong phép chiếu có chỉ số (indexes) phù hợp. Các chỉ số giúp cơ sở dữ liệu nhanh chóng tìm kiếm và trả về dữ liệu mà không cần phải quét qua toàn bộ bảng.
+
+        - Sử dụng câu lệnh LIMIT hoặc TOP: Nếu bạn chỉ cần một số lượng nhất định các hàng từ kết quả truy vấn, sử dụng câu lệnh LIMIT (cho MySQL và PostgreSQL) hoặc TOP (cho SQL Server) để giới hạn số lượng hàng trả về. Điều này giúp giảm bớt lượng dữ liệu cần được xử lý và trả về.
+    - #### Chọn đúng kiểu dữ liệu
+    - #### Chuẩn hóa data của DB <https://techmaster.vn/posts/36270/chuan-hoa-normalization-la-gi-vi-du-ve-1nf-2nf-3nf-bcnf-database>
+        - `Phân chia dữ liệu thành các bảng nhỏ`: Phân chia dữ liệu thành các bảng nhỏ với mỗi bảng chỉ chứa thông tin về một loại thực thể. Điều này giúp giảm lặp lại dữ liệu và giúp quản lý dữ liệu một cách hiệu quả hơn.
+
+        - `Xác định khóa chính (Primary Key)`: Mỗi bảng nên có một trường hoặc tập trường duy nhất được xác định là khóa chính. Khóa chính định danh mỗi bản ghi trong bảng và đảm bảo tính duy nhất của các bản ghi.
+
+        - `Loại bỏ phụ thuộc hàm (Functional Dependencies)`: Loại bỏ mọi phụ thuộc hàm không cần thiết trong cơ sở dữ liệu để giảm dữ liệu trùng lặp và đảm bảo tính nhất quán của dữ liệu.
+
+        - `Loại bỏ lặp lại dữ liệu (Eliminate Data Redundancy)`: Tránh lặp lại dữ liệu bằng cách phân chia dữ liệu thành các bảng riêng biệt và sử dụng các mối quan hệ để kết nối chúng lại với nhau.
+
+        - `Bảo vệ tính toàn vẹn của dữ liệu (Enforce Data Integrity)`: Sử dụng ràng buộc (constraints) như ràng buộc khóa ngoại (foreign key constraints) để đảm bảo tính toàn vẹn của dữ liệu và ngăn chặn các thay đổi không hợp lệ.
+
+        - `Chuẩn hóa dữ liệu quan hệ (Normalization)`: Thực hiện các quy tắc chuẩn hóa dữ liệu để phân chia dữ liệu thành các bảng có cấu trúc hợp lý và giảm bớt lặp lại dữ liệu.
+
+        - `Thiết kế các quan hệ hợp lý (Logical Relationship Design)`: Xác định và thiết kế các quan hệ logic giữa các bảng để đảm bảo tính nhất quán và dễ bảo trì của cơ sở dữ liệu.
+
+        - `Sử dụng kiểu dữ liệu phù hợp (Appropriate Data Types)`: Sử dụng kiểu dữ liệu phù hợp cho mỗi trường để đảm bảo tính nhất quán và hiệu quả của cơ sở dữ liệu.
+    - #### Hạn chế join
+        - `Hiệu suất`: Khi sử dụng JOIN, cơ sở dữ liệu phải so khớp các hàng từ các bảng khác nhau dựa trên các điều kiện liên kết. Việc này có thể tốn nhiều tài nguyên hơn so với các phương pháp khác như WHERE hoặc EXISTS. Trong một số trường hợp, việc sử dụng JOIN có thể dẫn đến các kết quả không hiệu quả và truy vấn chậm.
+
+        - `Khả năng hiểu và bảo trì`: Truy vấn sử dụng JOIN có thể trở nên phức tạp và khó hiểu, đặc biệt là khi kết hợp nhiều bảng và điều kiện liên kết. Điều này làm tăng khả năng phát sinh lỗi và làm cho việc bảo trì truy vấn trở nên khó khăn.
+
+        - `Tính mềm dẻo của dữ liệu`: Khi sử dụng JOIN, truy vấn có thể trở nên cứng nhắc đối với sự thay đổi trong cấu trúc hoặc mối quan hệ của dữ liệu. Nếu bạn thêm hoặc loại bỏ bảng hoặc cột, bạn cần phải sửa đổi các truy vấn JOIN tương ứng.
+
+        - `Tác động đến quy mô`: Sử dụng JOIN có thể làm tăng quy mô của truy vấn và ảnh hưởng đến hiệu suất của cơ sở dữ liệu, đặc biệt là khi sử dụng trong các truy vấn lớn hoặc với các bảng lớn.
+- ### Database/Network: Dùng batch request (Thay vì request đơn object thì query một batch các objects: ví dụ insert(a) -> insert(list(a, b, c..)))
+    Batch query có thể tăng hiệu suất của ứng dụng bằng cách giảm thiểu chi phí giao tiếp, tối ưu hóa sử dụng tài nguyên của cơ sở dữ liệu, và cải thiện thời gian đáp ứng của truy vấn dữ liệu
+    - `Giảm lưu lượng mạng`: Gửi một lượng lớn các truy vấn cùng một lúc có thể giảm thiểu lưu lượng mạng so với gửi từng truy vấn một cách độc lập. Điều này đặc biệt quan trọng khi ứng dụng và cơ sở dữ liệu không đặt ở cùng một nơi vật lý, và việc truyền dữ liệu qua mạng có thể tốn kém và gây trễ.
+
+    - `Tối ưu hóa thời gian thiết lập kết nối`: Mỗi lần thiết lập kết nối tới cơ sở dữ liệu đều tốn kém thời gian và tài nguyên hệ thống. Bằng cách gửi nhiều truy vấn trong một lần, batch query giúp giảm số lần thiết lập kết nối, giảm thiểu thời gian và tài nguyên cần thiết cho việc này.
+
+    - `Tối ưu hóa cơ sở dữ liệu và quản lý tài nguyên`: Cơ sở dữ liệu thường có khả năng xử lý các truy vấn một cách hiệu quả hơn khi chúng được gửi cùng một lúc. Batch query giúp tối ưu hóa sử dụng tài nguyên của cơ sở dữ liệu bằng cách giảm số lượng kết nối đồng thời và tối ưu hóa quá trình thực thi truy vấn.
+
+    - `Tối ưu hóa giao tiếp ứng dụng và cơ sở dữ liệu`: Batch query giảm thiểu số lần giao tiếp giữa ứng dụng và cơ sở dữ liệu, từ đó giảm thiểu độ trễ và chi phí liên quan đến việc truyền dữ liệu qua mạng.
+
+    - `Tăng hiệu quả khi làm việc với dữ liệu lớn`: Trong các tình huống làm việc với dữ liệu lớn, việc gửi các truy vấn theo cách batch thường là cách hiệu quả nhất để xử lý và truy xuất dữ liệu một cách nhanh chóng và hiệu quả.
+- ### Giải quyết hết các vấn đề về `Memory leak`
+- ### Dùng ViewStub nếu cần thiết
+- ### Hiểu + dùng các API có sẵn ở framework một cách hợp lý
+
 
 
